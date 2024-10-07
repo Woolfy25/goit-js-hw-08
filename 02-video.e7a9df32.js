@@ -1,0 +1,2 @@
+const e=document.querySelector("iframe"),t=new Vimeo.Player(e);t.on("timeupdate",_.throttle((function(e){localStorage.setItem("videoplayer-current-time",e.seconds)}),1e3)),t.on("loaded",(function(){const e=localStorage.getItem("videoplayer-current-time");null!==e&&t.setCurrentTime(parseFloat(e)).catch((function(e){console.error("Error setting the current time:",e)}))}));
+//# sourceMappingURL=02-video.e7a9df32.js.map

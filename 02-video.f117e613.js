@@ -1,0 +1,2 @@
+!function(){var e="videoplayer-current-time",t=document.querySelector("iframe"),r=new Vimeo.Player(t);r.on("timeupdate",_.throttle((function(t){localStorage.setItem(e,t.seconds)}),1e3)),r.on("loaded",(function(){var t=localStorage.getItem(e);null!==t&&r.setCurrentTime(parseFloat(t)).catch((function(e){console.error("Error setting the current time:",e)}))}))}();
+//# sourceMappingURL=02-video.f117e613.js.map
