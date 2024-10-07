@@ -1,34 +1,19 @@
-import '../css/common.css';
-import Player from '@vimeo/player';
-import { throttle } from 'lodash';
-
-const TIME_KEY = 'videoplayer-current-time';
-const iframe = document.querySelector('iframe');
+const TIME_KEY = "videoplayer-current-time";
+const iframe = document.querySelector("iframe");
 const player = new Vimeo.Player(iframe);
 
-const onPlay = function (data) {
-  const strigifyData = JSON.stringify(data);
-  localStorage.setItem(TIME_KEY, strigifyData);
-};
-player.on('timeupdate', throttle(onPlay, 1000));
+function saveCurrentTime(data) {
+  localStorage.setItem(TIME_KEY, data.seconds);
+}
 
-function resumePlayback() {
-  if (JSON.parse(localStorage.getItem(TIME_KEY)) === null) {
-    return;
-  }
-  const paused = JSON.parse(localStorage.getItem(TIME_KEY))['seconds'];
-  if (paused) {
-    player
-      .setCurrentTime(paused)
-      .then(function (seconds) {})
-      .catch(function (error) {
-        switch (error.name) {
-          case 'Error':
-            break;
-          default:
-            break;
-        }
-      });
+player.on("timeupdate", _.throttle(saveCurrentTime, 1000));
+
+function setSavedTime() {
+  const savedTime = localStorage.getItem(TIME_KEY);
+  if (savedTime !== null) {
+    player.setCurrentTime(parseFloat(savedTime)).catch(function (error) {
+      console.error("Error setting the current time:", error);
+    });
   }
 }
-resumePlayback();
+player.on("loaded", setSavedTime);
